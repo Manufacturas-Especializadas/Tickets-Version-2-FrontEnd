@@ -79,7 +79,7 @@ export const TicketsForm = () => {
                 type="button"
                 className="w-full sm:w-auto mt-0 sm:-mt-4 h-12.5 px-8 py-2 
                 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold 
-                rounded-lg transition-colors focus:outline-none"
+                rounded-lg transition-colors focus:outline-none hover:cursor-pointer"
               >
                 Buscar
               </button>
