@@ -17,54 +17,51 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, Props>(
           placeholder=" "
           rows={rows}
           className={`
-          peer
-          block w-full border bg-white
-          px-3 pt-5 pb-2 text-sm rounded-md
-          resize-none
+            peer
+            block w-full border bg-white
+            px-3 pt-6 pb-2 text-sm rounded-md
+            resize-y
 
-          focus:outline-none focus:ring-1
-          transition-colors duration-200 ease-in-out
+            focus:outline-none focus:ring-1
+            transition-colors duration-200 ease-in-out
 
-          ${
-            error
-              ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"
-          }
+            ${
+              error
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"
+            }
 
-          ${className}
-        `}
+            ${className}
+          `}
           {...props}
         />
 
         <label
           htmlFor={textareaId}
           className={`
-          absolute left-3 cursor-text duration-200 transform
-          origin-left pointer-events-none select-none
-          uppercase tracking-wide font-bold
+            absolute left-3 cursor-text duration-200 transform
+            origin-left pointer-events-none select-none
+            uppercase tracking-wide font-bold
 
-          top-0.5
-          text-[10px]
-          scale-100
-          translate-y-0
+            top-1.5
+            text-[10px]
+            scale-100
 
-          peer-placeholder-shown:top-1/2
-          peer-placeholder-shown:-translate-y-1/2
-          peer-placeholder-shown:text-sm
-          peer-placeholder-shown:font-normal
-          peer-placeholder-shown:text-gray-400
+            peer-placeholder-shown:top-4
+            peer-placeholder-shown:text-sm
+            peer-placeholder-shown:font-normal
+            peer-placeholder-shown:text-gray-400
 
-          peer-focus:top-0.5
-          peer-focus:translate-y-0
-          peer-focus:text-[10px]
-          peer-focus:font-bold
+            peer-focus:top-1.5
+            peer-focus:text-[10px]
+            peer-focus:font-bold
 
-          ${
-            error
-              ? "text-red-500 peer-focus:text-red-500"
-              : "text-gray-500 peer-focus:text-blue-600"
-          }
-        `}
+            ${
+              error
+                ? "text-red-500 peer-focus:text-red-500"
+                : "text-gray-500 peer-focus:text-blue-600"
+            }
+          `}
         >
           {label}{" "}
           {props.required && (
