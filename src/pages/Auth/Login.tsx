@@ -54,7 +54,7 @@ export const Login = () => {
           Sistemas - Tickets
         </h2>
         <p className="mt-2 text-center text-sm text-slate-600">
-          Inicia sesión para acceder a la mesa de ayuda
+          Inicia sesión para acceder al sistema de tickets
         </p>
       </div>
 
