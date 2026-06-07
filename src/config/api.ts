@@ -18,5 +18,8 @@ export const API_CONFIG = {
     classifications: {
       getClassifications: "/api/Classifications/getClassifications",
     },
+    status: {
+      getStatus: "/api/Status/getStatus",
+    },
   },
 };
