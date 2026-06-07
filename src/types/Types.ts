@@ -5,6 +5,21 @@ export interface AllTickets {
   estatus: string;
 }
 
+export interface DetailsTicket {
+  id: number;
+  name: string;
+  department: string;
+  affair: string;
+  problemDescription: string;
+  solution: any;
+  category: string;
+  status: string;
+  classification: any;
+  registrationDate: string;
+  resolutionDate: any;
+  attachments: any[];
+}
+
 export interface UpdateTicket {
   statusId: number;
   classificationId: number;
