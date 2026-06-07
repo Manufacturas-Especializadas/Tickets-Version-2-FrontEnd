@@ -34,8 +34,8 @@ export interface DetailsTicket {
 
 export interface UpdateTicket {
   statusId: number;
-  classificationId: number;
-  solution: string;
+  classificationId?: number | null;
+  solution: string | null;
 }
 
 export interface Classification {
