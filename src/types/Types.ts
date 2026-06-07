@@ -1,3 +1,8 @@
+export interface Login {
+  payRollNumber: number;
+  password: string;
+}
+
 export interface AllTickets {
   id: string;
   nombre: string;
