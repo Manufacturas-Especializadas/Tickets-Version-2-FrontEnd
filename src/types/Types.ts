@@ -4,3 +4,9 @@ export interface AllTickets {
   categoria: string;
   estatus: string;
 }
+
+export interface UpdateTicket {
+  statusId: number;
+  classificationId: number;
+  solution: string;
+}
