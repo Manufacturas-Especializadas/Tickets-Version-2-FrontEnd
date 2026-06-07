@@ -1,3 +1,10 @@
+export interface AuthResponse {
+  userId: number;
+  name: string;
+  role: string;
+  token: string;
+}
+
 export interface Login {
   payRollNumber: number;
   password: string;
