@@ -3,6 +3,7 @@ import type {
   AllTickets,
   Classification,
   DetailsTicket,
+  Status,
   UpdateTicket,
 } from "../../types/Types";
 import { apiClient } from "../client";
@@ -13,6 +14,7 @@ class TicketsService {
   private updateEndpoint = API_CONFIG.endpoint.tickets.update;
   private getClassificationEndpoint =
     API_CONFIG.endpoint.classifications.getClassifications;
+  private getStatusEndpoint = API_CONFIG.endpoint.status.getStatus;
 
   async getAll(): Promise<AllTickets[]> {
     return apiClient.get<AllTickets[]>(this.getAllEndpoint);
@@ -20,6 +22,10 @@ class TicketsService {
 
   async getClassification(): Promise<Classification[]> {
     return apiClient.get<Classification[]>(this.getClassificationEndpoint);
+  }
+
+  async getStatus(): Promise<Status[]> {
+    return apiClient.get<Status[]>(this.getStatusEndpoint);
   }
 
   async getBy(id: number): Promise<DetailsTicket> {
