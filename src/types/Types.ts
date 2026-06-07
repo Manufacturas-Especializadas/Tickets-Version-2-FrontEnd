@@ -25,3 +25,8 @@ export interface UpdateTicket {
   classificationId: number;
   solution: string;
 }
+
+export interface Classification {
+  id: number;
+  name: string;
+}
