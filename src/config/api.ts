@@ -12,5 +12,8 @@ export const API_CONFIG = {
       byId: "/api/Tickets/details/",
       update: "7/api/Tickets/",
     },
+    classifications: {
+      getClassifications: "/api/Classifications/getClassifications",
+    },
   },
 };
