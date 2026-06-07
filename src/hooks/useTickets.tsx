@@ -1,11 +1,15 @@
 import { useState, useCallback, useEffect } from "react";
 import { ticketsService } from "../api/services/TicketsService";
-import type { AllTickets, UpdateTicket } from "../types/Types";
+import type { AllTickets, DetailsTicket, UpdateTicket } from "../types/Types";
 
 export const useTickets = () => {
   const [tickets, setTickets] = useState<AllTickets[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [ticketDetail, setTicketDetail] = useState<DetailsTicket | null>(null);
+  const [isDetailLoading, setIsDetailLoading] = useState<boolean>(false);
+  const [detailError, setDetailError] = useState<string | null>(null);
 
   const fetchTickets = useCallback(async () => {
     setIsLoading(true);
@@ -18,6 +22,24 @@ export const useTickets = () => {
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  const fetchTicketById = useCallback(async (id: number) => {
+    setIsDetailLoading(true);
+    setDetailError(null);
+    try {
+      const data = await ticketsService.getBy(id);
+      setTicketDetail(data);
+    } catch (err: any) {
+      setDetailError(err.message || "Error al cargar los detalles del ticket.");
+    } finally {
+      setIsDetailLoading(false);
+    }
+  }, []);
+
+  const clearTicketDetail = useCallback(() => {
+    setTicketDetail(null);
+    setDetailError(null);
   }, []);
 
   const resolveTicket = async (id: number, payload: UpdateTicket) => {
@@ -39,5 +61,10 @@ export const useTickets = () => {
     error,
     fetchTickets,
     resolveTicket,
+    ticketDetail,
+    isDetailLoading,
+    detailError,
+    fetchTicketById,
+    clearTicketDetail,
   };
 };
