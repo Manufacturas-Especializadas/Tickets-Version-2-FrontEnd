@@ -9,6 +9,7 @@ export const API_CONFIG = {
   endpoint: {
     tickets: {
       all: "/api/Tickets/getAll",
+      update: "/api/Tickets//resolve",
     },
   },
 };
