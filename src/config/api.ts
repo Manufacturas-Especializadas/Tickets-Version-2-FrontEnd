@@ -13,6 +13,7 @@ export const API_CONFIG = {
     tickets: {
       all: "/api/Tickets/getAll",
       byId: "/api/Tickets/details/",
+      create: "/api/Tickets/create",
       update: "7/api/Tickets/",
       downloadReport: "/api/Tickets/DownloadReport",
     },
