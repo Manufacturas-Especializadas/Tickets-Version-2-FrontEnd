@@ -18,6 +18,7 @@ import { ResolveTicketForm } from "../../components/ResolveTicketForm/ResolveTic
 export const AdminTickets = () => {
   const {
     tickets,
+    fetchTickets,
     isLoading,
     error,
     ticketDetail,
@@ -271,7 +272,7 @@ export const AdminTickets = () => {
                 onCancel={closeModal}
                 onSuccess={() => {
                   closeModal();
-                  // fetchTickets();
+                  fetchTickets();
                 }}
               />
             )}
