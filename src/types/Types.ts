@@ -26,10 +26,22 @@ export interface DetailsTicket {
   solution: any;
   category: string;
   status: string;
+  statusId: number;
+  classificationId?: number | null;
   classification: any;
   registrationDate: string;
   resolutionDate: any;
   attachments: any[];
+}
+
+export interface CreateTicketPayload {
+  name: string;
+  department?: string;
+  affair: string;
+  problemDescription: string;
+  categoryId: number;
+  userId?: number;
+  files?: File[];
 }
 
 export interface UpdateTicket {
@@ -44,6 +56,11 @@ export interface Classification {
 }
 
 export interface Status {
+  id: number;
+  name: string;
+}
+
+export interface Category {
   id: number;
   name: string;
 }

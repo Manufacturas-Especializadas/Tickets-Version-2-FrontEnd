@@ -1,15 +1,19 @@
 import { useState, useCallback, useEffect } from "react";
 import { ticketsService } from "../api/services/TicketsService";
 import type { AllTickets, DetailsTicket, UpdateTicket } from "../types/Types";
+import { toast } from "sonner";
 
 export const useTickets = () => {
   const [tickets, setTickets] = useState<AllTickets[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const [ticketDetail, setTicketDetail] = useState<DetailsTicket | null>(null);
   const [isDetailLoading, setIsDetailLoading] = useState<boolean>(false);
   const [detailError, setDetailError] = useState<string | null>(null);
+
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
   const fetchTickets = useCallback(async () => {
     setIsLoading(true);
@@ -37,6 +41,21 @@ export const useTickets = () => {
     }
   }, []);
 
+  const downloadReport = async () => {
+    setIsDownloading(true);
+    const toastId = toast.loading("Generando reporte de Excel");
+
+    try {
+      await ticketsService.downloadReport();
+      toast.success("¡Reporte descargado exitosamente!", { id: toastId });
+    } catch (err: any) {
+      toast.error("Ocurrio un error al descargar el reporte", { id: toastId });
+      console.error(err);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   const clearTicketDetail = useCallback(() => {
     setTicketDetail(null);
     setDetailError(null);
@@ -48,6 +67,27 @@ export const useTickets = () => {
       await fetchTickets();
     } catch (err: any) {
       throw new Error(err.message || "Error al actualizar el ticket.");
+    }
+  };
+
+  const deleteTicket = async (id: number) => {
+    setIsDeleting(true);
+    const toastId = toast.loading("Eliminando ticket...");
+
+    try {
+      await ticketsService.delete(id);
+      toast.success("El ticket fue eliminado permanentemente.", {
+        id: toastId,
+      });
+      await fetchTickets();
+      return true;
+    } catch (err: any) {
+      toast.error(err.message || "No se pudo eliminar el ticket.", {
+        id: toastId,
+      });
+      return false;
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -66,5 +106,9 @@ export const useTickets = () => {
     detailError,
     fetchTicketById,
     clearTicketDetail,
+    isDownloading,
+    downloadReport,
+    isDeleting,
+    deleteTicket,
   };
 };

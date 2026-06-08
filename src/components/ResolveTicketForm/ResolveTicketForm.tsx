@@ -1,13 +1,13 @@
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useResolveTicket } from "../../hooks/useResolveTicket";
 
 interface Props {
-  ticketId: number;
+  ticket: any;
   onSuccess: () => void;
   onCancel: () => void;
 }
-export const ResolveTicketForm = ({ ticketId, onSuccess, onCancel }: Props) => {
+export const ResolveTicketForm = ({ ticket, onSuccess, onCancel }: Props) => {
   const {
     classifications,
     statuses,
@@ -19,6 +19,15 @@ export const ResolveTicketForm = ({ ticketId, onSuccess, onCancel }: Props) => {
   const [statusId, setStatusId] = useState<number | "">("");
   const [classificationId, setClassificationId] = useState<number | "">("");
   const [solution, setSolution] = useState<string>("");
+
+  useEffect(() => {
+    if (ticket) {
+      setStatusId(ticket.statusId || "");
+
+      setClassificationId(ticket.classificationId || "");
+      setSolution(ticket.solution || "");
+    }
+  }, [ticket]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +41,7 @@ export const ResolveTicketForm = ({ ticketId, onSuccess, onCancel }: Props) => {
       solution: solution.trim() !== "" ? solution : null,
     };
 
-    const isSuccess = await updateTicket(ticketId, payload);
+    const isSuccess = await updateTicket(ticket.id, payload);
 
     if (isSuccess) {
       onSuccess();

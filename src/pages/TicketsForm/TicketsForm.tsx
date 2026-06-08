@@ -1,11 +1,17 @@
-import React, { useState, type SyntheticEvent } from "react";
+import React, { useEffect, useState, type SyntheticEvent } from "react";
 import InputField from "../../components/Inputs/InputField";
 import SelectField, { type Option } from "../../components/Inputs/SelectField";
 import { TextareaField } from "../../components/Inputs/TextareaField";
-import { SendHorizonal } from "lucide-react";
+import { Loader2, SendHorizonal } from "lucide-react";
 import { DropzoneField } from "../../components/Inputs/DropzoneField";
+import { ticketsService } from "../../api/services/TicketsService";
+import { toast } from "sonner";
 
 export const TicketsForm = () => {
+  const [categories, setCategories] = useState<Option[]>([
+    { value: "", label: "Selecciona una categoría" },
+  ]);
+
   const [formData, setFormData] = useState({
     searchUser: "",
     nombre: "",
@@ -16,16 +22,30 @@ export const TicketsForm = () => {
   });
 
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formKey, setFormKey] = useState(0);
 
-  const categorias: Option[] = [
-    { value: "", label: "Selecciona una categoría" },
-    { value: "tecnico", label: "Técnico" },
-    { value: "epicor", label: "Epicor" },
-    { value: "soporte", label: "Soporte" },
-    { value: "consulta", label: "Consulta" },
-    { value: "accesos", label: "Problema de accesos" },
-    { value: "otro", label: "Otro" },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await ticketsService.getCategory();
+        const mappedOptions: Option[] = data.map((cat) => ({
+          value: cat.id.toString(),
+          label: cat.name,
+        }));
+
+        setCategories([
+          { value: "", label: "Selecciona una categoría" },
+          ...mappedOptions,
+        ]);
+      } catch (error) {
+        console.error("Error cargando categorías:", error);
+        toast.error("No se pudieron cargar las categorías.");
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -40,9 +60,49 @@ export const TicketsForm = () => {
     setAttachedFiles(files);
   };
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Datos del ticket a enviar:", formData);
+
+    if (!formData.categoria) {
+      toast.warning("Por favor, selecciona una categoría.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    const toastId = toast.loading("Enviando ticket y subiendo archivos...");
+
+    try {
+      await ticketsService.create({
+        name: formData.nombre,
+        department: formData.departamento,
+        affair: formData.asunto,
+        problemDescription: formData.descripcion,
+        categoryId: Number(formData.categoria),
+        files: attachedFiles,
+      });
+
+      toast.success("¡Tu ticket ha sido registrado exitosamente!", {
+        id: toastId,
+      });
+
+      setFormData({
+        searchUser: "",
+        nombre: "",
+        departamento: "",
+        asunto: "",
+        categoria: "",
+        descripcion: "",
+      });
+      setAttachedFiles([]);
+
+      setFormKey((prev) => prev + 1);
+    } catch (error: any) {
+      toast.error(error.message || "Ocurrió un error al enviar tu ticket.", {
+        id: toastId,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -66,7 +126,7 @@ export const TicketsForm = () => {
 
         <div className="px-6 py-8 sm:px-10 bg-slate-50/50">
           <div className="mb-8 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            {/* <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
               <div className="grow w-full">
                 <InputField
                   label="Buscar ticket por nombre de usuario"
@@ -83,7 +143,7 @@ export const TicketsForm = () => {
               >
                 Buscar
               </button>
-            </div>
+            </div> */}
           </div>
 
           <hr className="border-slate-200 mb-8" />
@@ -117,7 +177,7 @@ export const TicketsForm = () => {
                 label="Categoría"
                 name="categoria"
                 required
-                options={categorias}
+                options={categories}
                 value={formData.categoria}
                 onChange={handleChange}
               />
@@ -133,6 +193,7 @@ export const TicketsForm = () => {
             />
 
             <DropzoneField
+              key={formKey}
               label="Evidencias o Archivos Adjuntos"
               maxFiles={4}
               onFilesChange={handleFilesChange}
@@ -147,8 +208,12 @@ export const TicketsForm = () => {
                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
                 transition-all duration-200 hover:cursor-pointer"
               >
-                Enviar Ticket
-                <SendHorizonal size={18} />
+                {isSubmitting ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <SendHorizonal size={18} />
+                )}
+                {isSubmitting ? "Enviando..." : "Enviar Ticket"}
               </button>
               <div className="clear-both"></div>
             </div>

@@ -18,6 +18,7 @@ import { ResolveTicketForm } from "../../components/ResolveTicketForm/ResolveTic
 export const AdminTickets = () => {
   const {
     tickets,
+    fetchTickets,
     isLoading,
     error,
     ticketDetail,
@@ -25,6 +26,10 @@ export const AdminTickets = () => {
     detailError,
     fetchTicketById,
     clearTicketDetail,
+    isDownloading,
+    downloadReport,
+    isDeleting,
+    deleteTicket,
   } = useTickets();
 
   const [filter, setFilter] = useState("Todos");
@@ -131,13 +136,18 @@ export const AdminTickets = () => {
             Administra los tickets registrados
           </h1>
           <button
+            onClick={downloadReport}
             className="flex items-center justify-center gap-2 px-5 py-2.5 
             bg-[#0099ff] hover:bg-[#0088e6] text-white text-sm font-semibold 
             rounded-lg shadow-sm transition-colors focus:outline-none focus:ring-2 
             focus:ring-offset-2 focus:ring-[#0099ff] hover:cursor-pointer"
           >
-            <Download className="w-4 h-4" />
-            Descargar información
+            {isDownloading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            {isDownloading ? "Descargando..." : "Descargar información"}
           </button>
         </div>
 
@@ -251,41 +261,66 @@ export const AdminTickets = () => {
               </p>
             </div>
 
-            <ResolveTicketForm
-              ticketId={Number(selectedTicket)}
-              onCancel={closeModal}
-              onSuccess={() => {
-                closeModal();
-              }}
-            />
+            {isDetailLoading || !ticketDetail ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
+                <p className="text-slate-500 font-medium text-sm">
+                  Cargando información del ticket...
+                </p>
+              </div>
+            ) : (
+              <ResolveTicketForm
+                ticket={ticketDetail}
+                onCancel={closeModal}
+                onSuccess={() => {
+                  closeModal();
+                  fetchTickets();
+                }}
+              />
+            )}
           </div>
         )}
 
         {modalType === "eliminar" && (
           <div className="text-center space-y-4">
             <div
-              className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex 
-              items-center justify-center mx-auto mb-4"
+              className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center 
+              justify-center mx-auto mb-4"
             >
               <Trash2 className="w-6 h-6" />
             </div>
             <p className="text-slate-600">
-              ¿Estás seguro de que deseas eliminar este ticket? Esta acción no
-              se puede deshacer.
+              ¿Estás seguro de que deseas eliminar el ticket{" "}
+              <strong>#{selectedTicket}</strong>? Esta acción no se puede
+              deshacer.
             </p>
             <div className="flex justify-center gap-3 mt-6">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 
-                rounded-lg hover:bg-slate-200"
+                disabled={isDeleting}
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg 
+                hover:bg-slate-200 transition-colors disabled:opacity-50 hover:cursor-pointer"
               >
                 Cancelar
               </button>
               <button
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 
-                rounded-lg hover:bg-red-700"
+                onClick={async () => {
+                  if (selectedTicket) {
+                    const success = await deleteTicket(Number(selectedTicket));
+                    if (success) {
+                      closeModal();
+                    }
+                  }
+                }}
+                disabled={isDeleting}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white 
+                bg-red-600 rounded-lg hover:bg-red-700 transition-colors shadow-sm 
+                disabled:opacity-70 disabled:cursor-not-allowed hover:cursor-pointer"
               >
-                Sí, eliminar
+                {isDeleting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : null}
+                {isDeleting ? "Eliminando..." : "Sí, eliminar"}
               </button>
             </div>
           </div>
