@@ -25,6 +25,8 @@ export const AdminTickets = () => {
     detailError,
     fetchTicketById,
     clearTicketDetail,
+    isDownloading,
+    downloadReport,
   } = useTickets();
 
   const [filter, setFilter] = useState("Todos");
@@ -131,13 +133,18 @@ export const AdminTickets = () => {
             Administra los tickets registrados
           </h1>
           <button
+            onClick={downloadReport}
             className="flex items-center justify-center gap-2 px-5 py-2.5 
             bg-[#0099ff] hover:bg-[#0088e6] text-white text-sm font-semibold 
             rounded-lg shadow-sm transition-colors focus:outline-none focus:ring-2 
             focus:ring-offset-2 focus:ring-[#0099ff] hover:cursor-pointer"
           >
-            <Download className="w-4 h-4" />
-            Descargar información
+            {isDownloading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            {isDownloading ? "Descargando..." : "Descargar información"}
           </button>
         </div>
 
