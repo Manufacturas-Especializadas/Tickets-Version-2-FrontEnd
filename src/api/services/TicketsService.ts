@@ -1,6 +1,7 @@
 import { API_CONFIG } from "../../config/api";
 import type {
   AllTickets,
+  Category,
   Classification,
   CreateTicketPayload,
   DetailsTicket,
@@ -12,6 +13,7 @@ import { apiClient } from "../client";
 class TicketsService {
   private getAllEndpoint = API_CONFIG.endpoint.tickets.all;
   private getByEndpoint = API_CONFIG.endpoint.tickets.byId;
+  private getCategoryEndpoint = API_CONFIG.endpoint.tickets.getCategory;
   private downloadReportEndpoint = API_CONFIG.endpoint.tickets.downloadReport;
   private createEndpoint = API_CONFIG.endpoint.tickets.create;
   private updateEndpoint = API_CONFIG.endpoint.tickets.update;
@@ -29,6 +31,10 @@ class TicketsService {
 
   async getStatus(): Promise<Status[]> {
     return apiClient.get<Status[]>(this.getStatusEndpoint);
+  }
+
+  async getCategory(): Promise<Category[]> {
+    return apiClient.get<Category[]>(this.getCategoryEndpoint);
   }
 
   async getBy(id: number): Promise<DetailsTicket> {
