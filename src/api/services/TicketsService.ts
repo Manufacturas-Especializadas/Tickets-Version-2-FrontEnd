@@ -11,6 +11,7 @@ import { apiClient } from "../client";
 class TicketsService {
   private getAllEndpoint = API_CONFIG.endpoint.tickets.all;
   private getByEndpoint = API_CONFIG.endpoint.tickets.byId;
+  private downloadReportEndpoint = API_CONFIG.endpoint.tickets.downloadReport;
   private updateEndpoint = API_CONFIG.endpoint.tickets.update;
   private getClassificationEndpoint =
     API_CONFIG.endpoint.classifications.getClassifications;
@@ -30,6 +31,13 @@ class TicketsService {
 
   async getBy(id: number): Promise<DetailsTicket> {
     return apiClient.get<DetailsTicket>(`${this.getByEndpoint}${id}`);
+  }
+
+  async downloadReport(): Promise<void> {
+    const dateStr = new Date().toLocaleDateString("es-MX").replace(/\//g, "");
+    const filename = `ReporteDeTickets_${dateStr}.xlsx`;
+
+    await apiClient.downloadFile(this.downloadReportEndpoint, filename);
   }
 
   async update(id: number, payload: UpdateTicket): Promise<void> {
