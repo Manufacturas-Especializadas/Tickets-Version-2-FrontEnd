@@ -31,7 +31,7 @@ export const Navbar = () => {
             </div>
             <div className="hidden md:block h-6 w-px bg-slate-200" />{" "}
             <h1 className="text-lg font-semibold tracking-tight text-slate-800">
-              TICK<span className="text-blue-600">ETS</span>
+              TIC<span className="text-blue-600">KETS</span>
             </h1>
           </div>
 
