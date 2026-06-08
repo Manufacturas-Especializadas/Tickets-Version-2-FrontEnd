@@ -194,7 +194,7 @@ export const TicketsForm = () => {
 
             <DropzoneField
               key={formKey}
-              label="Evidencias o Archivos Adjuntos"
+              label="Evidencias o Archivos Adjuntos (opcional)"
               maxFiles={4}
               onFilesChange={handleFilesChange}
             />
