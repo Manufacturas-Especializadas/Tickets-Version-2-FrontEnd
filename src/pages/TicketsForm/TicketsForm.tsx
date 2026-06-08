@@ -126,7 +126,7 @@ export const TicketsForm = () => {
 
         <div className="px-6 py-8 sm:px-10 bg-slate-50/50">
           <div className="mb-8 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            {/* <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
               <div className="grow w-full">
                 <InputField
                   label="Buscar ticket por nombre de usuario"
@@ -143,7 +143,7 @@ export const TicketsForm = () => {
               >
                 Buscar
               </button>
-            </div>
+            </div> */}
           </div>
 
           <hr className="border-slate-200 mb-8" />
