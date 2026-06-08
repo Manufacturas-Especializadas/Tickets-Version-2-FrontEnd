@@ -258,13 +258,23 @@ export const AdminTickets = () => {
               </p>
             </div>
 
-            <ResolveTicketForm
-              ticketId={Number(selectedTicket)}
-              onCancel={closeModal}
-              onSuccess={() => {
-                closeModal();
-              }}
-            />
+            {isDetailLoading || !ticketDetail ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
+                <p className="text-slate-500 font-medium text-sm">
+                  Cargando información del ticket...
+                </p>
+              </div>
+            ) : (
+              <ResolveTicketForm
+                ticket={ticketDetail}
+                onCancel={closeModal}
+                onSuccess={() => {
+                  closeModal();
+                  // fetchTickets();
+                }}
+              />
+            )}
           </div>
         )}
 
