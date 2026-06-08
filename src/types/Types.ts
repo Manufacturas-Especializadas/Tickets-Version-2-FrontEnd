@@ -32,6 +32,16 @@ export interface DetailsTicket {
   attachments: any[];
 }
 
+export interface CreateTicketPayload {
+  name: string;
+  department?: string;
+  affair: string;
+  problemDescription: string;
+  categoryId: number;
+  userId?: number;
+  files?: File[];
+}
+
 export interface UpdateTicket {
   statusId: number;
   classificationId?: number | null;
@@ -44,6 +54,11 @@ export interface Classification {
 }
 
 export interface Status {
+  id: number;
+  name: string;
+}
+
+export interface Category {
   id: number;
   name: string;
 }
