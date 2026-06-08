@@ -7,6 +7,7 @@ export const useTickets = () => {
   const [tickets, setTickets] = useState<AllTickets[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const [ticketDetail, setTicketDetail] = useState<DetailsTicket | null>(null);
   const [isDetailLoading, setIsDetailLoading] = useState<boolean>(false);
@@ -69,6 +70,27 @@ export const useTickets = () => {
     }
   };
 
+  const deleteTicket = async (id: number) => {
+    setIsDeleting(true);
+    const toastId = toast.loading("Eliminando ticket...");
+
+    try {
+      await ticketsService.delete(id);
+      toast.success("El ticket fue eliminado permanentemente.", {
+        id: toastId,
+      });
+      await fetchTickets();
+      return true;
+    } catch (err: any) {
+      toast.error(err.message || "No se pudo eliminar el ticket.", {
+        id: toastId,
+      });
+      return false;
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   useEffect(() => {
     fetchTickets();
   }, [fetchTickets]);
@@ -86,5 +108,7 @@ export const useTickets = () => {
     clearTicketDetail,
     isDownloading,
     downloadReport,
+    isDeleting,
+    deleteTicket,
   };
 };

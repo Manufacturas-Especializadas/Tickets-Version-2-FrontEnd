@@ -28,6 +28,8 @@ export const AdminTickets = () => {
     clearTicketDetail,
     isDownloading,
     downloadReport,
+    isDeleting,
+    deleteTicket,
   } = useTickets();
 
   const [filter, setFilter] = useState("Todos");
@@ -282,28 +284,43 @@ export const AdminTickets = () => {
         {modalType === "eliminar" && (
           <div className="text-center space-y-4">
             <div
-              className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex 
-              items-center justify-center mx-auto mb-4"
+              className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center 
+              justify-center mx-auto mb-4"
             >
               <Trash2 className="w-6 h-6" />
             </div>
             <p className="text-slate-600">
-              ¿Estás seguro de que deseas eliminar este ticket? Esta acción no
-              se puede deshacer.
+              ¿Estás seguro de que deseas eliminar el ticket{" "}
+              <strong>#{selectedTicket}</strong>? Esta acción no se puede
+              deshacer.
             </p>
             <div className="flex justify-center gap-3 mt-6">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 
-                rounded-lg hover:bg-slate-200"
+                disabled={isDeleting}
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg 
+                hover:bg-slate-200 transition-colors disabled:opacity-50 hover:cursor-pointer"
               >
                 Cancelar
               </button>
               <button
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 
-                rounded-lg hover:bg-red-700"
+                onClick={async () => {
+                  if (selectedTicket) {
+                    const success = await deleteTicket(Number(selectedTicket));
+                    if (success) {
+                      closeModal();
+                    }
+                  }
+                }}
+                disabled={isDeleting}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white 
+                bg-red-600 rounded-lg hover:bg-red-700 transition-colors shadow-sm 
+                disabled:opacity-70 disabled:cursor-not-allowed hover:cursor-pointer"
               >
-                Sí, eliminar
+                {isDeleting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : null}
+                {isDeleting ? "Eliminando..." : "Sí, eliminar"}
               </button>
             </div>
           </div>

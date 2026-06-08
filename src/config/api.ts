@@ -16,6 +16,7 @@ export const API_CONFIG = {
       getCategory: "/api/Tickets/getCategory",
       create: "/api/Tickets/create",
       update: "/api/Tickets",
+      delete: "/api/Tickets/delete/",
       downloadReport: "/api/Tickets/DownloadReport",
     },
     classifications: {

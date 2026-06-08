@@ -17,6 +17,7 @@ class TicketsService {
   private downloadReportEndpoint = API_CONFIG.endpoint.tickets.downloadReport;
   private createEndpoint = API_CONFIG.endpoint.tickets.create;
   private updateEndpoint = API_CONFIG.endpoint.tickets.update;
+  private deleteEndpoint = API_CONFIG.endpoint.tickets.delete;
   private getClassificationEndpoint =
     API_CONFIG.endpoint.classifications.getClassifications;
   private getStatusEndpoint = API_CONFIG.endpoint.status.getStatus;
@@ -77,6 +78,10 @@ class TicketsService {
     const url = `${this.updateEndpoint}/${id}/resolve`;
 
     return apiClient.put<void>(url, payload);
+  }
+
+  async delete(id: number): Promise<void> {
+    return apiClient.delete(`${this.deleteEndpoint}${id}`);
   }
 }
 
