@@ -2,6 +2,7 @@ import { API_CONFIG } from "../../config/api";
 import type {
   AllTickets,
   Classification,
+  CreateTicketPayload,
   DetailsTicket,
   Status,
   UpdateTicket,
@@ -12,6 +13,7 @@ class TicketsService {
   private getAllEndpoint = API_CONFIG.endpoint.tickets.all;
   private getByEndpoint = API_CONFIG.endpoint.tickets.byId;
   private downloadReportEndpoint = API_CONFIG.endpoint.tickets.downloadReport;
+  private createEndpoint = API_CONFIG.endpoint.tickets.create;
   private updateEndpoint = API_CONFIG.endpoint.tickets.update;
   private getClassificationEndpoint =
     API_CONFIG.endpoint.classifications.getClassifications;
@@ -38,6 +40,31 @@ class TicketsService {
     const filename = `ReporteDeTickets_${dateStr}.xlsx`;
 
     await apiClient.downloadFile(this.downloadReportEndpoint, filename);
+  }
+
+  async create(payload: CreateTicketPayload): Promise<void> {
+    const formData = new FormData();
+
+    formData.append("Name", payload.name);
+    formData.append("Affair", payload.affair);
+    formData.append("ProblemDescription", payload.problemDescription);
+    formData.append("CategoryId", payload.categoryId.toString());
+
+    if (payload.department) {
+      formData.append("Department", payload.department);
+    }
+
+    if (payload.userId) {
+      formData.append("UserId", payload.userId.toString());
+    }
+
+    if (payload.files && payload.files.length > 0) {
+      payload.files.forEach((file) => {
+        formData.append("Files", file);
+      });
+    }
+
+    return apiClient.post<void>(this.createEndpoint, formData);
   }
 
   async update(id: number, payload: UpdateTicket): Promise<void> {
