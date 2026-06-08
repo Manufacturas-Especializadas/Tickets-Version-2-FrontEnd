@@ -26,6 +26,8 @@ export interface DetailsTicket {
   solution: any;
   category: string;
   status: string;
+  statusId: number;
+  classificationId?: number | null;
   classification: any;
   registrationDate: string;
   resolutionDate: any;
