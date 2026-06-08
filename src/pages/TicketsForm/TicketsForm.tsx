@@ -23,6 +23,7 @@ export const TicketsForm = () => {
 
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formKey, setFormKey] = useState(0);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -62,7 +63,6 @@ export const TicketsForm = () => {
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validación básica de categoría
     if (!formData.categoria) {
       toast.warning("Por favor, selecciona una categoría.");
       return;
@@ -94,6 +94,8 @@ export const TicketsForm = () => {
         descripcion: "",
       });
       setAttachedFiles([]);
+
+      setFormKey((prev) => prev + 1);
     } catch (error: any) {
       toast.error(error.message || "Ocurrió un error al enviar tu ticket.", {
         id: toastId,
@@ -191,6 +193,7 @@ export const TicketsForm = () => {
             />
 
             <DropzoneField
+              key={formKey}
               label="Evidencias o Archivos Adjuntos"
               maxFiles={4}
               onFilesChange={handleFilesChange}
