@@ -14,6 +14,7 @@ import { useTickets } from "../../hooks/useTickets";
 import type { AllTickets } from "../../types/Types";
 import { TicketDetailView } from "../../components/TicketDetailView/TicketDetailView";
 import { ResolveTicketForm } from "../../components/ResolveTicketForm/ResolveTicketForm";
+import { TicketStatusBadge } from "../../components/TicketStatusBadge/TicketStatusBadge";
 
 export const AdminTickets = () => {
   const {
@@ -71,25 +72,7 @@ export const AdminTickets = () => {
     },
     {
       header: "Estatus",
-      accessor: (row) => {
-        const statusColors: Record<string, string> = {
-          Abierto: "bg-blue-100 text-blue-700 border-blue-200",
-          Pendiente: "bg-amber-100 text-amber-700 border-amber-200",
-          Cerrado: "bg-slate-100 text-slate-600 border-slate-200",
-        };
-
-        const colorClass =
-          statusColors[row.estatus] ||
-          "bg-slate-100 text-slate-600 border-slate-200";
-
-        return (
-          <span
-            className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${colorClass}`}
-          >
-            {row.estatus}
-          </span>
-        );
-      },
+      accessor: (row) => <TicketStatusBadge status={row.estatus} />,
     },
     {
       header: "Acciones",

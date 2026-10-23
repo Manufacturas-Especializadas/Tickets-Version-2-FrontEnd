@@ -2,7 +2,8 @@ import React, { useEffect, useState, type SyntheticEvent } from "react";
 import InputField from "../../components/Inputs/InputField";
 import SelectField, { type Option } from "../../components/Inputs/SelectField";
 import { TextareaField } from "../../components/Inputs/TextareaField";
-import { Loader2, SendHorizonal } from "lucide-react";
+import { ClipboardList, Loader2, SendHorizonal } from "lucide-react";
+import { Link } from "react-router-dom";
 import { DropzoneField } from "../../components/Inputs/DropzoneField";
 import { ticketsService } from "../../api/services/TicketsService";
 import { toast } from "sonner";
@@ -122,6 +123,13 @@ export const TicketsForm = () => {
             Por favor, completa este formulario para reportar un problema o
             realizar una solicitud. Nuestro equipo responderá lo antes posible.
           </p>
+          <Link
+            to="/seguimiento"
+            className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <ClipboardList className="h-4 w-4" aria-hidden="true" />
+            Seguimiento de tickets
+          </Link>
         </div>
 
         <div className="px-6 py-8 sm:px-10 bg-slate-50/50">

@@ -1,9 +1,10 @@
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useResolveTicket } from "../../hooks/useResolveTicket";
+import type { DetailsTicket, UpdateTicket } from "../../types/Types";
 
 interface Props {
-  ticket: any;
+  ticket: DetailsTicket;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -19,6 +20,7 @@ export const ResolveTicketForm = ({ ticket, onSuccess, onCancel }: Props) => {
   const [statusId, setStatusId] = useState<number | "">("");
   const [classificationId, setClassificationId] = useState<number | "">("");
   const [solution, setSolution] = useState<string>("");
+  const [publicComment, setPublicComment] = useState("");
 
   useEffect(() => {
     if (ticket) {
@@ -26,19 +28,21 @@ export const ResolveTicketForm = ({ ticket, onSuccess, onCancel }: Props) => {
 
       setClassificationId(ticket.classificationId || "");
       setSolution(ticket.solution || "");
+      setPublicComment(ticket.publicComment ?? "");
     }
   }, [ticket]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!statusId) return;
+    if (!statusId || publicComment.length > 500) return;
 
-    const payload = {
+    const payload: UpdateTicket = {
       statusId: Number(statusId),
       classificationId:
         classificationId !== "" ? Number(classificationId) : null,
       solution: solution.trim() !== "" ? solution : null,
+      publicComment: publicComment.trim() !== "" ? publicComment : null,
     };
 
     const isSuccess = await updateTicket(ticket.id, payload);
@@ -120,6 +124,40 @@ export const ResolveTicketForm = ({ ticket, onSuccess, onCancel }: Props) => {
 
       <div className="space-y-1">
         <label
+          htmlFor="publicComment"
+          className="block text-sm font-semibold text-slate-700"
+        >
+          Comentario para el solicitante
+        </label>
+        <p id="publicCommentHelp" className="text-xs text-slate-500 mb-2">
+          Este comentario será visible en la pantalla pública de seguimiento.
+        </p>
+        <textarea
+          id="publicComment"
+          rows={4}
+          maxLength={500}
+          value={publicComment}
+          onChange={(e) => setPublicComment(e.target.value)}
+          aria-describedby="publicCommentHelp publicCommentCount"
+          aria-invalid={publicComment.length > 500}
+          className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-y"
+          placeholder="Ej: Se está revisando el equipo."
+        />
+        <p
+          id="publicCommentCount"
+          className={`text-right text-xs ${publicComment.length > 500 ? "text-red-600" : "text-slate-500"}`}
+        >
+          {publicComment.length} / 500
+        </p>
+        {publicComment.length > 500 && (
+          <p role="alert" className="text-xs text-red-600">
+            El comentario no puede exceder 500 caracteres.
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1">
+        <label
           htmlFor="solution"
           className="block text-sm font-semibold text-slate-700"
         >
@@ -153,7 +191,7 @@ export const ResolveTicketForm = ({ ticket, onSuccess, onCancel }: Props) => {
         </button>
         <button
           type="submit"
-          disabled={isSubmitting || statusId === ""}
+          disabled={isSubmitting || statusId === "" || publicComment.length > 500}
           className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-white 
           bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm 
           disabled:opacity-70 disabled:cursor-not-allowed hover:cursor-pointer"

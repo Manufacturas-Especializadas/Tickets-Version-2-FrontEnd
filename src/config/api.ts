@@ -13,6 +13,8 @@ export const API_CONFIG = {
     tickets: {
       all: "/api/Tickets/getAll",
       byId: "/api/Tickets/details/",
+      public: "/api/Tickets/public",
+      publicById: "/api/Tickets/public/",
       getCategory: "/api/Tickets/getCategory",
       create: "/api/Tickets/create",
       update: "/api/Tickets",
