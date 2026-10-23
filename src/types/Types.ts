@@ -24,6 +24,7 @@ export interface DetailsTicket {
   affair: string;
   problemDescription: string;
   solution: any;
+  publicComment?: string | null;
   category: string;
   status: string;
   statusId: number;
@@ -48,6 +49,24 @@ export interface UpdateTicket {
   statusId: number;
   classificationId?: number | null;
   solution: string | null;
+  publicComment?: string | null;
+}
+
+export interface PublicTicket {
+  id: number;
+  folio: string;
+  name: string;
+  department: string | null;
+  affair: string | null;
+  category: string;
+  status: string;
+  publicComment: string | null;
+  registrationDate: string;
+  resolutionDate: string | null;
+}
+
+export interface PublicTicketDetail extends PublicTicket {
+  problemDescription: string | null;
 }
 
 export interface Classification {

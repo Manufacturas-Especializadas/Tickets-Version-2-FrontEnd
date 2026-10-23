@@ -5,6 +5,8 @@ import type {
   Classification,
   CreateTicketPayload,
   DetailsTicket,
+  PublicTicket,
+  PublicTicketDetail,
   Status,
   UpdateTicket,
 } from "../../types/Types";
@@ -24,6 +26,16 @@ class TicketsService {
 
   async getAll(): Promise<AllTickets[]> {
     return apiClient.get<AllTickets[]>(this.getAllEndpoint);
+  }
+
+  async getPublicTickets(): Promise<PublicTicket[]> {
+    return apiClient.get<PublicTicket[]>(API_CONFIG.endpoint.tickets.public);
+  }
+
+  async getPublicTicketById(id: number): Promise<PublicTicketDetail> {
+    return apiClient.get<PublicTicketDetail>(
+      `${API_CONFIG.endpoint.tickets.publicById}${id}`,
+    );
   }
 
   async getClassification(): Promise<Classification[]> {
